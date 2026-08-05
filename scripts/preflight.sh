@@ -38,9 +38,9 @@ else
 fi
 
 for forbidden in apps/cliptown-cli apps/cliptown-infra; do
-  if git config --file .gitmodules --get-regexp '^submodule\..*\.path$' 2>/dev/null | grep -Fq " $forbidden"; then
+  if git config --file .gitmodules --get-regexp '^submodule\..*\.path$' 2>/dev/null | awk '{print $2}' | grep -Fxq "$forbidden"; then
     fail "forbidden monorepo submodule is declared: $forbidden"
-  elif git ls-files --stage -- "$forbidden" | grep -q '^160000 '; then
+  elif git ls-files --stage -- "$forbidden" | awk '$1 == "160000" {found=1} END {exit !found}'; then
     fail "forbidden monorepo gitlink is indexed: $forbidden"
   else
     pass "$forbidden remains independently owned"
