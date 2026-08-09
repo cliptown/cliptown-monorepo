@@ -1,32 +1,32 @@
 {
   "schema_version": 1,
   "gitlinks_status": "applied",
-  "rollout": "zed-package-source-boundary",
+  "rollout": "desktop-tray-lifecycle",
   "repositories": {
     "apps/cliptown-interfaces": {
       "repository": "cliptown/cliptown-interfaces",
       "branch": "main",
-      "commit": "77a2fdf8e0c6d9ec44133fb21814173259ff186c"
+      "commit": "19fe535db6bccaf3e7e86deb0b1a40bbead7f55c"
     },
     "apps/cliptown-clients": {
       "repository": "cliptown/cliptown-clients",
       "branch": "main",
-      "commit": "d5e2be3a39169f900f8fef2e097735ddd4c557a1"
+      "commit": "1b3e3e3582cc4880443b17c0669cce832543ad16"
     },
     "apps/cliptown-rust-backend.rs": {
       "repository": "cliptown/cliptown-rust-backend.rs",
       "branch": "main",
-      "commit": "f3697e62c6761dc3abc39f4577251fbc908bed5d"
+      "commit": "9fae9bdc7ea250498fc3f6fa3ea784c4bd8446ff"
     },
     "apps/cliptown-flutter": {
       "repository": "cliptown/cliptown-flutter",
       "branch": "main",
-      "commit": "f1da59ad04957b6893526137c52f24a8e371a88d"
+      "commit": "46da5e3b5fedae8ef180a5871eb62db03e0fb266"
     },
     "apps/cliptown-extension": {
       "repository": "cliptown/cliptown-extension",
       "branch": "main",
-      "commit": "1767062539c249e7dc9e8665b8c026777137a57e"
+      "commit": "1ca94a0fbe59208e539335c7c7c546c214a63771"
     }
   }
 }
