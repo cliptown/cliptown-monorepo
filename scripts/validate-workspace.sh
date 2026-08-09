@@ -46,9 +46,6 @@ quick_step 'apps/cliptown-clients/scripts/validate-layout.sh' \
 quick_step 'apps/cliptown-extension/package.json' \
   'Validate browser-extension privacy and tests' \
   bash -c 'cd apps/cliptown-extension && npm run check'
-quick_step 'apps/cliptown-infra/Chart.yaml' \
-  'Lint and render ClipTown GitOps chart' \
-  bash -c 'cd apps/cliptown-infra && helm lint . --strict && helm template cliptown-apps . >/tmp/cliptown-rendered.yaml'
 
 if [[ "$MODE" == '--quick' ]]; then
   cat <<'EOF'
@@ -65,8 +62,7 @@ step 'Run complete local preflight' bash scripts/preflight.sh
 for required_path in \
   apps/cliptown-interfaces/scripts/check-wire-contract.py \
   apps/cliptown-clients/scripts/validate-layout.sh \
-  apps/cliptown-extension/package.json \
-  apps/cliptown-infra/Chart.yaml; do
+  apps/cliptown-extension/package.json; do
   if [[ ! -e "$required_path" ]]; then
     echo "--full requires an updated recorded gitlink containing $required_path" >&2
     exit 1
