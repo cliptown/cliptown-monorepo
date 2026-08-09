@@ -21,7 +21,7 @@
     "apps/cliptown-flutter": {
       "repository": "cliptown/cliptown-flutter",
       "branch": "main",
-      "commit": "03374a187929662b62b2a8116dafa4fe1239a1b0"
+      "commit": "3cbcef81cebcd1f6020b8999c5accbd20c87d380"
     },
     "apps/cliptown-extension": {
       "repository": "cliptown/cliptown-extension",
