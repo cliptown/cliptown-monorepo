@@ -6,12 +6,12 @@
     "apps/cliptown-interfaces": {
       "repository": "cliptown/cliptown-interfaces",
       "branch": "main",
-      "commit": "19fe535db6bccaf3e7e86deb0b1a40bbead7f55c"
+      "commit": "f5a494136ba425d952cf480237b694fd33b79d2f"
     },
     "apps/cliptown-clients": {
       "repository": "cliptown/cliptown-clients",
       "branch": "main",
-      "commit": "1b3e3e3582cc4880443b17c0669cce832543ad16"
+      "commit": "bee9716bf331b06b847879af15a5fec73dfb3b05"
     },
     "apps/cliptown-rust-backend.rs": {
       "repository": "cliptown/cliptown-rust-backend.rs",
