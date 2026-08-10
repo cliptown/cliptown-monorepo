@@ -6,7 +6,7 @@
     "apps/cliptown-interfaces": {
       "repository": "cliptown/cliptown-interfaces",
       "branch": "main",
-      "commit": "f5a494136ba425d952cf480237b694fd33b79d2f"
+      "commit": "c66c6aa1a20dd46bb9d7f91a2c19d87e9ee4f1a6"
     },
     "apps/cliptown-clients": {
       "repository": "cliptown/cliptown-clients",
