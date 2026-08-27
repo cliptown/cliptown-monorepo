@@ -18,3 +18,7 @@
 	path = apps/cliptown-extension
 	url = https://github.com/cliptown/cliptown-extension.git
 	branch = main
+[submodule "apps/cliptown-sidecar.rs"]
+	path = apps/cliptown-sidecar.rs
+	url = https://github.com/cliptown/cliptown-sidecar.rs.git
+	branch = main
