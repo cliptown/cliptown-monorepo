@@ -1,0 +1,9 @@
+[
+ "apps/cliptown-cli",
+ "apps/cliptown-clients",
+ "apps/cliptown-extension",
+ "apps/cliptown-flutter",
+ "apps/cliptown-infra",
+ "apps/cliptown-interfaces",
+ "apps/cliptown-rust-backend.rs"
+]
