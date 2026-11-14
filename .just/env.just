@@ -222,12 +222,39 @@ env-keygen: _env-dec
 
 # Fail-closed audit: no plaintext in git, gitignore intact, ciphertext valid.
 [group('env')]
-env-check: _env-dec
+# Key-independent audit must not create env/dec or require ores-sops, sops,
+# flags2env, an age identity, or an installed runtime. Unlike write/decrypt
+# recipes, it intentionally only inspects the existing checkout.
+env-check:
     #!/usr/bin/env bash
     set -euo pipefail
     cd {{ justfile_directory() }}
     fail=0
     note() { echo "  ✗ $1"; fail=1; }
+
+    echo "managed path boundary:"
+    for rel in env env/enc env/dec; do
+      if [[ -L "$rel" ]]; then
+        note "$rel must not be a symlink"
+      elif [[ -e "$rel" && ! -d "$rel" ]]; then
+        note "$rel must be a directory"
+      fi
+    done
+    for rel in .gitignore .sops.yaml; do
+      [[ ! -L "$rel" && -f "$rel" ]] || note "$rel must be a regular policy file"
+    done
+    for f in env/enc/*.env.enc env/dec/*.env; do
+      [[ ! -L "$f" ]] || note "$f must not be a symlink"
+    done
+    if [[ -L .env ]]; then
+      target=$(readlink .env)
+      case "$target" in
+        env/dec/dev.env|env/dec/stage.env|env/dec/prod.env) ;;
+        *) note ".env symlink escapes the managed environment" ;;
+      esac
+    elif [[ -e .env ]]; then
+      note "unmanaged plaintext .env is present"
+    fi
 
     echo "tracked files:"
     # Dotenv-shaped secrets: `.env`, `.env.<anything>`, and anything under
