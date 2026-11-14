@@ -27,6 +27,11 @@
       "repository": "cliptown/cliptown-extension",
       "branch": "main",
       "commit": "1ca94a0fbe59208e539335c7c7c546c214a63771"
+    },
+    "apps/cliptown-sidecar.rs": {
+      "repository": "cliptown/cliptown-sidecar.rs",
+      "branch": "main",
+      "commit": "f5cb6cfceb666d52cc1122cb669c2c1de83504f7"
     }
   }
 }
