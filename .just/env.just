@@ -221,10 +221,10 @@ env-keygen: _env-dec
     age-keygen -y "$key"
 
 # Fail-closed audit: no plaintext in git, gitignore intact, ciphertext valid.
-[group('env')]
 # Key-independent audit must not create env/dec or require ores-sops, sops,
 # flags2env, an age identity, or an installed runtime. Unlike write/decrypt
 # recipes, it intentionally only inspects the existing checkout.
+[group('env')]
 env-check:
     #!/usr/bin/env bash
     set -euo pipefail
