@@ -29,7 +29,7 @@ require_contract_line '^dart = "3\.12\.2"$' 'Dart 3.12.2 contract'
 require_contract_line '^helm = "3\.17\.3"$' 'Helm 3.17.3 contract'
 require_contract_line '^CLIPTOWN_ANDROID_API = "35"$' 'Android API 35 contract'
 
-EXPECTED_SUBMODULE_BRANCH_COUNT=5
+EXPECTED_SUBMODULE_BRANCH_COUNT=6
 SUBMODULE_BRANCH_COUNT=$(git config --file .gitmodules --get-regexp '^submodule\..*\.branch$' 2>/dev/null | wc -l | tr -d ' ')
 if [[ "$SUBMODULE_BRANCH_COUNT" == "$EXPECTED_SUBMODULE_BRANCH_COUNT" ]]; then
   pass "$EXPECTED_SUBMODULE_BRANCH_COUNT ClipTown source submodules declare a branch"
