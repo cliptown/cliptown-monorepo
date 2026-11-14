@@ -38,7 +38,101 @@ jobs:
           python3 scripts/validate-release-policy.py
       - name: Validate submodule policy
         run: |
-          test "$(git config --file .gitmodules --get-regexp '^submodule\..*\.branch$' | wc -l)" -eq 5
+          test "$(git config --file .gitmodules --get-regexp '^submodule\..*\.branch
+          if git config --file .gitmodules --get-regexp '^submodule\..*\.branch$' | grep -v ' main$'; then
+            echo 'all ClipTown source submodules must track main' >&2
+            exit 1
+          fi
+          for forbidden in apps/cliptown-cli apps/cliptown-infra; do
+            if git config --file .gitmodules --get-regexp '^submodule\..*\.path$' | awk '{print $2}' | grep -Fxq "$forbidden"; then
+              echo "forbidden monorepo submodule: $forbidden" >&2
+              exit 1
+            fi
+            if git ls-files --stage -- "$forbidden" | awk '$1 == "160000" {found=1} END {exit !found}'; then
+              echo "forbidden monorepo gitlink: $forbidden" >&2
+              exit 1
+            fi
+          done
+          git submodule status --recursive
+          if git submodule status --recursive | grep -E '^[+-]'; then
+            echo 'submodule pointers must resolve exactly' >&2
+            exit 1
+          fi
+      - name: Validate source manifest against exact gitlinks
+        run: |
+          python3 -m py_compile scripts/validate-source-manifest.py
+          python3 scripts/validate-source-manifest.py
+      - name: Run low-risk cross-repository validation
+        run: bash scripts/validate-workspace.sh --quick
+      - name: Enforce encryption architecture
+        run: |
+          grep -Fiq 'cryptographically random account master key' README.md
+          grep -Fq 'The six-digit PIN is **not** the clipboard encryption key' README.md
+          if grep -Fiq "encryption key is derived locally from the user's 6-digit PIN" README.md; then
+            echo 'PIN-derived clipboard encryption key guidance is forbidden' >&2
+            exit 1
+          fi
+          if grep -Eiq 'biometric(s| data)? (is|are|becomes?|derive[sd]?) (the )?encryption key' README.md; then
+            echo 'raw biometric encryption-key guidance is forbidden' >&2
+            exit 1
+          fi
+ | wc -l)" -eq 6
+          expected_paths=(
+            apps/cliptown-rust-backend.rs
+            apps/cliptown-flutter
+            apps/cliptown-clients
+            apps/cliptown-interfaces
+            apps/cliptown-extension
+            apps/cliptown-sidecar.rs
+          )
+          for path in "${expected_paths[@]}"; do
+            actual=$(git config --file .gitmodules --get "submodule.$path.url")
+            expected="https://github.com/cliptown/${path#apps/}.git"
+            test "$actual" = "$expected" || {
+              echo "unexpected submodule URL for $path" >&2
+              exit 1
+            }
+          done
+          url_count=$(git config --file .gitmodules --get-regexp '^submodule\..*\.url
+          if git config --file .gitmodules --get-regexp '^submodule\..*\.branch$' | grep -v ' main$'; then
+            echo 'all ClipTown source submodules must track main' >&2
+            exit 1
+          fi
+          for forbidden in apps/cliptown-cli apps/cliptown-infra; do
+            if git config --file .gitmodules --get-regexp '^submodule\..*\.path$' | awk '{print $2}' | grep -Fxq "$forbidden"; then
+              echo "forbidden monorepo submodule: $forbidden" >&2
+              exit 1
+            fi
+            if git ls-files --stage -- "$forbidden" | awk '$1 == "160000" {found=1} END {exit !found}'; then
+              echo "forbidden monorepo gitlink: $forbidden" >&2
+              exit 1
+            fi
+          done
+          git submodule status --recursive
+          if git submodule status --recursive | grep -E '^[+-]'; then
+            echo 'submodule pointers must resolve exactly' >&2
+            exit 1
+          fi
+      - name: Validate source manifest against exact gitlinks
+        run: |
+          python3 -m py_compile scripts/validate-source-manifest.py
+          python3 scripts/validate-source-manifest.py
+      - name: Run low-risk cross-repository validation
+        run: bash scripts/validate-workspace.sh --quick
+      - name: Enforce encryption architecture
+        run: |
+          grep -Fiq 'cryptographically random account master key' README.md
+          grep -Fq 'The six-digit PIN is **not** the clipboard encryption key' README.md
+          if grep -Fiq "encryption key is derived locally from the user's 6-digit PIN" README.md; then
+            echo 'PIN-derived clipboard encryption key guidance is forbidden' >&2
+            exit 1
+          fi
+          if grep -Eiq 'biometric(s| data)? (is|are|becomes?|derive[sd]?) (the )?encryption key' README.md; then
+            echo 'raw biometric encryption-key guidance is forbidden' >&2
+            exit 1
+          fi
+ | wc -l)
+          test "$url_count" -eq 6
           if git config --file .gitmodules --get-regexp '^submodule\..*\.branch$' | grep -v ' main$'; then
             echo 'all ClipTown source submodules must track main' >&2
             exit 1
