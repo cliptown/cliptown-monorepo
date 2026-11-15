@@ -15,16 +15,24 @@ const REQUIRED: &[&str] = &[
     "does not discover a local application",
 ];
 const FORBIDDEN: &[&str] = &[
-    "future direct local bridge", "local user-mediated handoff",
+    "future direct local bridge",
+    "local user-mediated handoff",
     "integrate through explicit clipboard writes",
     "integration transport is the clipboard",
-    "memebank://", "cliptown://", "canopenurl", "canlaunchurl",
+    "memebank://",
+    "cliptown://",
+    "canopenurl",
+    "canlaunchurl",
 ];
 const CONTRACT_REQUIRED: &[&str] = &[
-    "must not", "probe whether memebank or cliptown is installed",
-    "use local ipc, loopback ports", "fall back to clipboard handoff",
-    "memebank never calls a 3fa backend", "write and delete operations",
-    "idempotency-key/body mismatch", "no mobile applications installed",
+    "must not",
+    "probe whether memebank or cliptown is installed",
+    "use local ipc, loopback ports",
+    "fall back to clipboard handoff",
+    "memebank never calls a 3fa backend",
+    "write and delete operations",
+    "idempotency-key/body mismatch",
+    "no mobile applications installed",
     "contract preview rather than a deployable integration",
 ];
 
@@ -50,8 +58,7 @@ fn validate_text(readme: &str, contract: &str) -> Result<(), String> {
 }
 
 fn validate_repository(root: &Path) -> Result<(), String> {
-    let readme = fs::read_to_string(root.join("README.md"))
-        .map_err(|_| "cannot read README.md")?;
+    let readme = fs::read_to_string(root.join("README.md")).map_err(|_| "cannot read README.md")?;
     let contract = fs::read_to_string(root.join("docs/memebank-integration.md"))
         .map_err(|_| "cannot read docs/memebank-integration.md")?;
     validate_text(&readme, &contract)
@@ -109,10 +116,9 @@ mod tests {
     fn contract_only_requirement_cannot_be_satisfied_by_readme() {
         let (readme, contract) = valid_fixture();
         let phrase = "no mobile applications installed";
-        assert!(validate_text(
-            &format!("{readme} {phrase}"),
-            &contract.replace(phrase, ""),
-        ).is_err());
+        assert!(
+            validate_text(&format!("{readme} {phrase}"), &contract.replace(phrase, ""),).is_err()
+        );
     }
 
     #[test]
