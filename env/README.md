@@ -4,7 +4,7 @@ Secrets for `cliptown/cliptown-monorepo` are **committed, encrypted**, with [sop
 following the fleet-wide convention already used by fiducia-cloud, shared-auth,
 benefactor-cc, 3FA-app and zed-pkg (the `ORESoftware/ores-sops` contract).
 
-```
+```text
 env/enc/dev.env.enc     ciphertext — committed. This is the source of truth.
 env/enc/prod.env.enc    ciphertext — committed. Protected-operator recipients.
 env/dec/dev.env         plaintext  — gitignored, mode 0600, disposable.
@@ -59,7 +59,7 @@ just env-check      # confirms nothing plaintext is tracked and all files decryp
 Prefer `just env-edit` over decrypt-edit-encrypt. Both work, but `env-edit`
 re-encrypts only the values you actually changed, so the diff names them:
 
-```
+```diff
 -DATABASE_URL=ENC[AES256_GCM,data:OG3trz…]
 +DATABASE_URL=ENC[AES256_GCM,data:9fKq2a…]
 ```

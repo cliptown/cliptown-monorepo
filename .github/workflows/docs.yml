@@ -38,7 +38,36 @@ jobs:
           python3 scripts/validate-release-policy.py
       - name: Validate submodule policy
         run: |
-          test "$(git config --file .gitmodules --get-regexp '^submodule\..*\.branch$' | wc -l)" -eq 5
+          set -euo pipefail
+          expected_paths=(
+            apps/cliptown-rust-backend.rs
+            apps/cliptown-flutter
+            apps/cliptown-clients
+            apps/cliptown-interfaces
+            apps/cliptown-extension
+            apps/cliptown-sidecar.rs
+          )
+          for field in path url branch; do
+            count=$(git config --file .gitmodules --get-regexp "^submodule\\..*\\.${field}$" | wc -l)
+            if [[ "$count" -ne 6 ]]; then
+              echo "expected exactly six source submodule $field entries, got $count" >&2
+              exit 1
+            fi
+          done
+          for path in "${expected_paths[@]}"; do
+            actual_path=$(git config --file .gitmodules --get "submodule.$path.path")
+            actual_url=$(git config --file .gitmodules --get "submodule.$path.url")
+            actual_branch=$(git config --file .gitmodules --get "submodule.$path.branch")
+            expected_url="https://github.com/cliptown/${path#apps/}.git"
+            if [[ "$actual_path" != "$path" || "$actual_url" != "$expected_url" || "$actual_branch" != main ]]; then
+              echo "unexpected path, URL or branch for submodule $path" >&2
+              exit 1
+            fi
+            if ! git ls-files --stage -- "$path" | awk '$1 == "160000" {found=1} END {exit !found}'; then
+              echo "missing exact gitlink for $path" >&2
+              exit 1
+            fi
+          done
           if git config --file .gitmodules --get-regexp '^submodule\..*\.branch$' | grep -v ' main$'; then
             echo 'all ClipTown source submodules must track main' >&2
             exit 1

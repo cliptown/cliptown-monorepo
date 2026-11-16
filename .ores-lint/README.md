@@ -71,7 +71,7 @@ This is expected. Some tests, shutdown-recovery fixtures, and rare control
 flow should not call `send()`. Use the comment that matches the host linter,
 or the unified ores-lint form which works in every language:
 
-```
+```text
 // ores-lint-disable-next-line require-send
 // ores-lint-disable-line require-send
 // ores-lint-disable-file require-send
@@ -90,7 +90,6 @@ Do not disable the rule for a whole file unless the file is a generated
 fixture. Prefer the next-line form.
 
 ## The two things worth knowing
-
 
 **1. Implicit-return findings are capped.** `clippy::implicit_return` fires once
 per implicit return, which on a real crate is hundreds of identical lines. The
