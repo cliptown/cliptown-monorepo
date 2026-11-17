@@ -30,7 +30,7 @@ quick_step() {
 }
 
 step 'Validate toolchain and submodule contract' bash scripts/preflight.sh --contract-only
-step 'Validate MemeBank API/SDK boundary' python3 scripts/check-memebank-boundary.py
+step 'Validate MemeBank API/SDK boundary (Rust)' cargo run --quiet --manifest-path tools/memebank-boundary/Cargo.toml -- .
 
 if git submodule status --recursive | grep -Eq '^[+-]'; then
   echo 'submodules must be initialized and match recorded gitlinks' >&2

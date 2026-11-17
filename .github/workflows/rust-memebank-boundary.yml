@@ -1,0 +1,49 @@
+name: Rust MemeBank boundary
+
+on:
+  pull_request:
+    paths:
+      - "tools/memebank-boundary/**"
+      - "scripts/validate-workspace.sh"
+      - "docs/memebank-integration.md"
+      - "README.md"
+      - ".github/workflows/rust-memebank-boundary.yml"
+  push:
+    branches: [main]
+    paths:
+      - "tools/memebank-boundary/**"
+      - "scripts/validate-workspace.sh"
+      - "docs/memebank-integration.md"
+      - "README.md"
+      - ".github/workflows/rust-memebank-boundary.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rust-memebank-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rust-boundary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out source tree without secrets
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Pin Rust compiler and lints
+        uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4
+        with:
+          toolchain: 1.88.0
+          components: rustfmt, clippy
+      - name: Check Rust formatter
+        run: cargo fmt --manifest-path tools/memebank-boundary/Cargo.toml --all --check
+      - name: Check Rust Clippy
+        run: cargo clippy --manifest-path tools/memebank-boundary/Cargo.toml --all-targets -- -D warnings
+      - name: Run Rust positive and negative tests
+        run: cargo test --manifest-path tools/memebank-boundary/Cargo.toml --all-targets
+      - name: Enforce API-only contract
+        run: cargo run --quiet --manifest-path tools/memebank-boundary/Cargo.toml -- .
